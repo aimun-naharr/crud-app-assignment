@@ -30,6 +30,7 @@ const userSchema = new Schema<TUser>({
   email: {
     type: String,
     required: true,
+    unique: true,
   },
   hobbies: {
     type: [String],
