@@ -1,14 +1,17 @@
-import express, { Application, Request, Response } from "express";
-import { config } from "./config";
+import cors from 'cors';
+import express, { Application, Request, Response } from 'express';
 
 const app: Application = express();
 
-console.log({
-  port: config.port,
-});
+// parsers
+app.use(express.json());
+app.use(cors());
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("Hello World!");
+//application routes
+// app.use('/api/users');
+
+app.get('/', (req: Request, res: Response) => {
+  res.send('Hello World!');
 });
 
 export default app;
