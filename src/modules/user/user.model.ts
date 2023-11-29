@@ -1,3 +1,4 @@
+import bcrypt from 'bcrypt';
 import mongoose from 'mongoose';
 import TUser from './user.interface';
 const { Schema } = mongoose;
@@ -11,17 +12,18 @@ const userSchema = new Schema<TUser>({
   username: {
     type: String,
     required: true,
+    unique: true,
   },
   password: {
     type: String,
     required: true,
     min: 6,
   },
-  fullname: {
+  fullName: {
     firstName: { type: String, required: true, max: 10 },
     lastName: { type: String, required: true, max: 10 },
   },
-  age: { type: Number },
+  age: { type: Number, required: true },
   address: {
     street: { type: String, required: true },
     city: { type: String, required: true },
@@ -38,5 +40,17 @@ const userSchema = new Schema<TUser>({
   },
 });
 
-const User = mongoose.model('User', userSchema);
+//middlewares
+userSchema.pre('save', async function (next) {
+  try {
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(this.password, salt);
+    this.password = hashedPassword;
+    next();
+  } catch (error: any) {
+    next(error);
+  }
+});
+
+const User = mongoose.model<TUser>('User', userSchema);
 export default User;

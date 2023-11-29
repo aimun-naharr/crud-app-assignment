@@ -18,11 +18,12 @@ const UserSchemaValidation = z.object({
   userId: z.number(),
   username: z.string(),
   password: z.string().min(6, { message: 'Must be more than 5 characters' }),
-  fullname: fullNameSchemaValidation,
-  age: z.number().optional(),
+  fullName: fullNameSchemaValidation,
+  age: z.number(),
   address: addressSchemaValidation,
   email: z.string().email(),
   hobbies: z.array(z.string()),
+  isActive: z.boolean(),
 });
 
 export default UserSchemaValidation;

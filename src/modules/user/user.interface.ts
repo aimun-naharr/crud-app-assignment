@@ -12,7 +12,7 @@ type TUser = {
   userId: number;
   username: string;
   password: string;
-  fullname: TFullName;
+  fullName: TFullName;
   age: number;
   email: string;
   isActive: boolean;
