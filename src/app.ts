@@ -1,7 +1,7 @@
 import cors from 'cors';
-import express, { Application, NextFunction, Request, Response } from 'express';
-import userRouter from './modules/user/user.route';
+import express, { Application, Request, Response } from 'express';
 import { errorMiddleware } from './modules/middleware/error';
+import userRouter from './modules/user/user.route';
 
 const app: Application = express();
 
@@ -13,7 +13,10 @@ app.use(cors());
 app.use('/api/users', userRouter);
 
 app.get('/', (req: Request, res: Response) => {
-  res.send('Hello World!');
+  res.status(200).json({
+    success: true,
+    message: 'Welcome to the Assignment API',
+  });
 });
 
 // using error middleware

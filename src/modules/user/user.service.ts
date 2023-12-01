@@ -58,7 +58,7 @@ const updateUserInDb = async (id: number, updatedInfo: TUpdateUser) => {
 const deleteUserfromDb = async (id: number) => {
   const isUserExits = await User.isUserExits(Number(id));
   if (!isUserExits) {
-    throw new Error('User not found');
+    throw new ErrorHandler('User not found', 404);
   }
   const result = User.deleteOne({ userId: id });
   return result;

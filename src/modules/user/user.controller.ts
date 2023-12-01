@@ -14,7 +14,7 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
       data: result,
     });
   } catch (err: any) {
-    if (err.code === 404) {
+    if (err.statusCode === 404) {
       res.status(404).json({
         success: false,
         message: err.message || 'User already exists!',
@@ -53,7 +53,7 @@ const getUserById = async (req: Request, res: Response) => {
       data: user,
     });
   } catch (error: any) {
-    if (error.code === 404) {
+    if (error.statusCode === 404) {
       res.status(404).json({
         success: false,
         message: 'User not found',
@@ -80,11 +80,20 @@ const updateUser = async (req: Request, res: Response) => {
       message: 'User updated successfully!',
       data: result,
     });
-  } catch (error) {
-    res.json(error);
+  } catch (error: any) {
+    if (error.statusCode === 404) {
+      res.status(404).json({
+        success: false,
+        message: error.message,
+      });
+    } else {
+      res.status(500).json({
+        success: false,
+        message: 'Something went wrong',
+      });
+    }
   }
 };
-
 export const deleteUser = async (req: Request, res: Response) => {
   const { userId } = req.params;
   try {
@@ -96,8 +105,18 @@ export const deleteUser = async (req: Request, res: Response) => {
         data: null,
       });
     }
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
+    if (error.statusCode === 404) {
+      res.status(404).json({
+        success: false,
+        message: error.message,
+      });
+    } else {
+      res.status(500).json({
+        success: false,
+        message: 'Something went wrong',
+      });
+    }
   }
 };
 
