@@ -35,7 +35,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserController = exports.deleteUser = void 0;
 const user_service_1 = require("./user.service");
 const user_validate_1 = __importStar(require("./user.validate"));
-const createUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const zodParsedUserData = user_validate_1.default.parse(req.body);
         const result = yield user_service_1.userServices.createUser(zodParsedUserData);
