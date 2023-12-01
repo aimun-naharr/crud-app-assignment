@@ -1,10 +1,10 @@
-import { NextFunction, Request, Response } from 'express';
+import { Request, Response } from 'express';
 import { userServices } from './user.service';
 import UserSchemaValidation, {
   UpdateUserSchemaValidation,
 } from './user.validate';
 
-const createUser = async (req: Request, res: Response, next: NextFunction) => {
+const createUser = async (req: Request, res: Response) => {
   try {
     const zodParsedUserData = UserSchemaValidation.parse(req.body);
     const result = await userServices.createUser(zodParsedUserData);

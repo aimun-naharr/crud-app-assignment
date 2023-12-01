@@ -57,7 +57,7 @@ const getUserByIdFromDb = (id) => __awaiter(void 0, void 0, void 0, function* ()
 const updateUserInDb = (id, updatedInfo) => __awaiter(void 0, void 0, void 0, function* () {
     const isUserExits = yield user_model_1.default.isUserExits(Number(id));
     if (!isUserExits) {
-        throw new Error('User not found');
+        throw new error_1.default('User not found', 404);
     }
     else {
         if (updatedInfo.password) {

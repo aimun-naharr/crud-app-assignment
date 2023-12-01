@@ -50,12 +50,20 @@ const createUser = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
             res.status(404).json({
                 success: false,
                 message: err.message || 'User already exists!',
+                error: {
+                    code: err.statusCode,
+                    description: err.description,
+                },
             });
         }
         else {
             res.status(500).json({
                 success: false,
                 message: err.message || 'Something went wrong',
+                error: {
+                    code: err.code || 500,
+                    description: err.description || 'Something went wrong',
+                },
             });
         }
     }
@@ -73,6 +81,10 @@ const getAllUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         res.status(500).json({
             success: false,
             message: 'Something went wrong',
+            error: {
+                code: error.statusCode,
+                description: error,
+            },
         });
     }
 });
@@ -117,6 +129,10 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             res.status(404).json({
                 success: false,
                 message: error.message,
+                error: {
+                    code: 404,
+                    description: error,
+                },
             });
         }
         else {
@@ -144,6 +160,10 @@ const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             res.status(404).json({
                 success: false,
                 message: error.message,
+                error: {
+                    code: 404,
+                    description: error,
+                },
             });
         }
         else {
