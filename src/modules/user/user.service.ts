@@ -34,7 +34,7 @@ const getUserByIdFromDb = async (id: number) => {
 const updateUserInDb = async (id: number, updatedInfo: TUpdateUser) => {
   const isUserExits = await User.isUserExits(Number(id));
   if (!isUserExits) {
-    throw new Error('User not found');
+    throw new ErrorHandler('User not found', 404);
   } else {
     if (updatedInfo.password) {
       updatedInfo.password = await bcrypt.hash(

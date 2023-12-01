@@ -18,11 +18,19 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
       res.status(404).json({
         success: false,
         message: err.message || 'User already exists!',
+        error: {
+          code: err.statusCode,
+          description: err.description,
+        },
       });
     } else {
       res.status(500).json({
         success: false,
         message: err.message || 'Something went wrong',
+        error: {
+          code: err.code || 500,
+          description: err.description || 'Something went wrong',
+        },
       });
     }
   }
@@ -35,10 +43,14 @@ const getAllUsers = async (req: Request, res: Response) => {
       message: 'Users fetched successfully!',
       data: allUsers,
     });
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).json({
       success: false,
       message: 'Something went wrong',
+      error: {
+        code: error.statusCode,
+        description: error,
+      },
     });
   }
 };
@@ -85,6 +97,10 @@ const updateUser = async (req: Request, res: Response) => {
       res.status(404).json({
         success: false,
         message: error.message,
+        error: {
+          code: 404,
+          description: error,
+        },
       });
     } else {
       res.status(500).json({
@@ -110,6 +126,10 @@ export const deleteUser = async (req: Request, res: Response) => {
       res.status(404).json({
         success: false,
         message: error.message,
+        error: {
+          code: 404,
+          description: error,
+        },
       });
     } else {
       res.status(500).json({
