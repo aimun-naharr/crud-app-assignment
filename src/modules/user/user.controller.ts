@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from 'express';
-import ErrorHandler from '../middleware/error';
 import { userServices } from './user.service';
 import UserSchemaValidation, {
   UpdateUserSchemaValidation,
@@ -14,11 +13,20 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
       message: 'User created successfully!',
       data: result,
     });
-  } catch (error: any) {
-    return next(new ErrorHandler(error.message, error.code));
+  } catch (err: any) {
+    if (err.code === 404) {
+      res.status(404).json({
+        success: false,
+        message: err.message || 'User already exists!',
+      });
+    } else {
+      res.status(500).json({
+        success: false,
+        message: err.message || 'Something went wrong',
+      });
+    }
   }
 };
-
 const getAllUsers = async (req: Request, res: Response) => {
   try {
     const allUsers = await userServices.getAllUsersFromDb();
@@ -28,7 +36,10 @@ const getAllUsers = async (req: Request, res: Response) => {
       data: allUsers,
     });
   } catch (error) {
-    res.json(error);
+    res.status(500).json({
+      success: false,
+      message: 'Something went wrong',
+    });
   }
 };
 
@@ -41,8 +52,18 @@ const getUserById = async (req: Request, res: Response) => {
       message: 'User fetched successfully!',
       data: user,
     });
-  } catch (error) {
-    res.json(error);
+  } catch (error: any) {
+    if (error.code === 404) {
+      res.status(404).json({
+        success: false,
+        message: 'User not found',
+      });
+    } else {
+      res.status(500).json({
+        success: false,
+        message: 'Something went wrong',
+      });
+    }
   }
 };
 

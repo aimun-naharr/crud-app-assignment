@@ -1,8 +1,8 @@
 import bcrypt from 'bcrypt';
 import { config } from '../../config';
+import ErrorHandler from '../middleware/error';
 import TUser, { TUpdateUser } from './user.interface';
 import User from './user.model';
-import ErrorHandler from '../middleware/error';
 
 const createUser = async (user: TUser) => {
   const newUser = new User(user);
@@ -24,12 +24,11 @@ const getAllUsersFromDb = async () => {
 };
 
 const getUserByIdFromDb = async (id: number) => {
-  try {
-    const user = await User.findOne({ userId: id }, { password: 0, orders: 0 });
-    return user;
-  } catch (error) {
-    return error;
+  const user = await User.findOne({ userId: id }, { password: 0, orders: 0 });
+  if (!user) {
+    throw new ErrorHandler(`No user found`, 404);
   }
+  return user;
 };
 
 const updateUserInDb = async (id: number, updatedInfo: TUpdateUser) => {
