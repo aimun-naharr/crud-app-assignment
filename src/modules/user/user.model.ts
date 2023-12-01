@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 import mongoose from 'mongoose';
 import TUser from './user.interface';
+import { config } from '../../config';
 const { Schema } = mongoose;
 
 const userSchema = new Schema<TUser>({
@@ -43,7 +44,7 @@ const userSchema = new Schema<TUser>({
 //middlewares
 userSchema.pre('save', async function (next) {
   try {
-    const salt = await bcrypt.genSalt(10);
+    const salt = await bcrypt.genSalt(Number(config.salt));
     const hashedPassword = await bcrypt.hash(this.password, salt);
     this.password = hashedPassword;
     next();

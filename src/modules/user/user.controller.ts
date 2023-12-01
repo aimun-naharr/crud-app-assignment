@@ -6,18 +6,20 @@ const createUser = async (req: Request, res: Response) => {
   try {
     const zodParsedUserData = UserSchemaValidation.parse(req.body);
     const result = await userServices.createUser(zodParsedUserData);
-    const { password, ...rest }: { password: string; [key: string]: unknown } =
-      result;
     res.status(200).json({
       success: true,
       message: 'User created successfully!',
-      data: rest,
+      data: result,
     });
   } catch (error: any) {
+    console.log('user error', error);
     res.json(error);
   }
 };
 
+const getAllUsers = async (req: Request, res: Response) => {};
+
 export const UserController = {
   createUser,
+  getAllUsers,
 };

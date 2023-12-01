@@ -5,7 +5,8 @@ const createUser = async (user: TUser) => {
   try {
     const newUser = new User(user);
     const result = await newUser.save();
-    return result;
+    const { password, ...rest } = result.toObject();
+    return rest;
   } catch (error) {
     return error;
   }
