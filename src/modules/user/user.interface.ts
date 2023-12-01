@@ -7,6 +7,11 @@ type TAddress = {
   city: string;
   country: string;
 };
+type TOrder = {
+  productName: string;
+  quantity: number;
+  price: number;
+};
 
 type TUser = {
   userId: number;
@@ -18,7 +23,7 @@ type TUser = {
   isActive: boolean;
   hobbies: string[];
   address: TAddress;
-  //  Todo: orders
+  orders?: TOrder[];
 };
 
 export default TUser;

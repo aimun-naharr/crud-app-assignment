@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import mongoose from 'mongoose';
-import TUser from './user.interface';
 import { config } from '../../config';
+import TUser from './user.interface';
 const { Schema } = mongoose;
 
 const userSchema = new Schema<TUser>({
@@ -38,6 +38,16 @@ const userSchema = new Schema<TUser>({
   hobbies: {
     type: [String],
     required: true,
+  },
+  orders: {
+    type: [
+      {
+        product: { type: String, required: true },
+        quantity: { type: Number, required: true },
+        price: { type: Number, required: true },
+      },
+    ],
+    default: undefined,
   },
 });
 

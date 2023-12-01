@@ -17,9 +17,35 @@ const createUser = async (req: Request, res: Response) => {
   }
 };
 
-const getAllUsers = async (req: Request, res: Response) => {};
+const getAllUsers = async (req: Request, res: Response) => {
+  try {
+    const allUsers = await userServices.getAllUsersFromDb();
+    res.status(200).json({
+      success: true,
+      message: 'Users fetched successfully!',
+      data: allUsers,
+    });
+  } catch (error) {
+    res.json(error);
+  }
+};
+
+const getUserById = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+    const user = await userServices.getUserByIdFromDb(Number(userId));
+    res.status(200).json({
+      success: true,
+      message: 'User fetched successfully!',
+      data: user,
+    });
+  } catch (error) {
+    res.json(error);
+  }
+};
 
 export const UserController = {
   createUser,
   getAllUsers,
+  getUserById,
 };
