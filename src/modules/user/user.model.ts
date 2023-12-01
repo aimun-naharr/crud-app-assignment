@@ -1,10 +1,10 @@
 import bcrypt from 'bcrypt';
 import mongoose from 'mongoose';
 import { config } from '../../config';
-import TUser from './user.interface';
+import TUser, { UserModel } from './user.interface';
 const { Schema } = mongoose;
 
-const userSchema = new Schema<TUser>({
+const userSchema = new Schema<TUser, UserModel>({
   userId: {
     type: Number,
     unique: true,
@@ -51,6 +51,12 @@ const userSchema = new Schema<TUser>({
   },
 });
 
+//instance methods
+userSchema.static('isUserExits', async function (userId: number) {
+  const user = await User.findOne({ userId });
+  return user;
+});
+
 //middlewares
 userSchema.pre('save', async function (next) {
   try {
@@ -63,5 +69,5 @@ userSchema.pre('save', async function (next) {
   }
 });
 
-const User = mongoose.model<TUser>('User', userSchema);
+const User = mongoose.model<TUser, UserModel>('User', userSchema);
 export default User;

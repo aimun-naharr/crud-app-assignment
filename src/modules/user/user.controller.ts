@@ -1,8 +1,11 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
+import ErrorHandler from '../middleware/error';
 import { userServices } from './user.service';
-import UserSchemaValidation from './user.validate';
+import UserSchemaValidation, {
+  UpdateUserSchemaValidation,
+} from './user.validate';
 
-const createUser = async (req: Request, res: Response) => {
+const createUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const zodParsedUserData = UserSchemaValidation.parse(req.body);
     const result = await userServices.createUser(zodParsedUserData);
@@ -12,8 +15,7 @@ const createUser = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (error: any) {
-    console.log('user error', error);
-    res.json(error);
+    return next(new ErrorHandler(error.message, error.code));
   }
 };
 
@@ -44,8 +46,44 @@ const getUserById = async (req: Request, res: Response) => {
   }
 };
 
+const updateUser = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+    const zodParsedUserData = UpdateUserSchemaValidation.parse(req.body);
+    const result = await userServices.updateUserInDb(
+      Number(userId),
+      zodParsedUserData,
+    );
+    res.status(200).json({
+      success: true,
+      message: 'User updated successfully!',
+      data: result,
+    });
+  } catch (error) {
+    res.json(error);
+  }
+};
+
+export const deleteUser = async (req: Request, res: Response) => {
+  const { userId } = req.params;
+  try {
+    const result = await userServices.deleteUserfromDb(Number(userId));
+    if (result.deletedCount === 1) {
+      res.status(200).json({
+        success: true,
+        message: 'User deleted successfully!',
+        data: null,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const UserController = {
   createUser,
   getAllUsers,
   getUserById,
+  updateUser,
+  deleteUser,
 };

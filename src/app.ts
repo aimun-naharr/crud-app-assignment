@@ -1,6 +1,7 @@
 import cors from 'cors';
-import express, { Application, Request, Response } from 'express';
+import express, { Application, NextFunction, Request, Response } from 'express';
 import userRouter from './modules/user/user.route';
+import { errorMiddleware } from './modules/middleware/error';
 
 const app: Application = express();
 
@@ -14,5 +15,8 @@ app.use('/api/users', userRouter);
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello World!');
 });
+
+// using error middleware
+app.use(errorMiddleware);
 
 export default app;

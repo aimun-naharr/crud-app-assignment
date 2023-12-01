@@ -31,5 +31,20 @@ const UserSchemaValidation = z.object({
   isActive: z.boolean(),
   orders: z.array(orderSchemaValidation).optional(),
 });
+export const UpdateUserSchemaValidation = z.object({
+  userId: z.number().optional(),
+  username: z.string().optional(),
+  password: z
+    .string()
+    .min(6, { message: 'Must be more than 5 characters' })
+    .optional(),
+  fullName: fullNameSchemaValidation.optional(),
+  age: z.number().optional(),
+  address: addressSchemaValidation.optional(),
+  email: z.string().email().optional(),
+  hobbies: z.array(z.string()).optional(),
+  isActive: z.boolean().optional(),
+  orders: z.array(orderSchemaValidation).optional(),
+});
 
 export default UserSchemaValidation;
