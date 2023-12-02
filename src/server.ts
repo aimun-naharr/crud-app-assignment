@@ -1,8 +1,7 @@
-import dotenv from "dotenv";
-import mongoose from "mongoose";
-import app from "./app";
-import { config } from "./config";
-dotenv.config();
+import mongoose from 'mongoose';
+import app from './app';
+import { config } from './config';
+// dotenv.config();
 
 async function main() {
   try {
